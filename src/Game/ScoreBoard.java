@@ -10,6 +10,8 @@ public class ScoreBoard {
     private int scoreWhite;
     private int weight;
     private int[][] board;
+    private int playerOneScore;
+    private int playerTwoScore;
 
     ScoreBoard(Game g, Board b){
         white = g.getWhiteName();
@@ -21,6 +23,8 @@ public class ScoreBoard {
         scoreWhite = b.getWhiteScore();
         weight=b.getWeight();
         board = b.getBoardCopy();
+        playerOneScore = g.getPlayerOneScore();
+        playerTwoScore = g.getPlayerTwoScore();
     }
 
     public String getWhite() {
@@ -62,15 +66,11 @@ public class ScoreBoard {
     }
 
     public int getScorePlayer1(){
-        if(player1.equals(black))
-            return scoreBlack;
-        return scoreWhite;
+        return playerOneScore;
     }
 
     public int getScorePlayer2(){
-        if(player2.equals(black))
-            return scoreBlack;
-        return scoreWhite;
+        return playerTwoScore;
     }
 
     public int[][] getBoard() {

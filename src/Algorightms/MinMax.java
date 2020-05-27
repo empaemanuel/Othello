@@ -1,5 +1,6 @@
 package Algorightms;
 
+
 import Game.Game;
 import Game.Board;
 import Game.Player;
@@ -7,7 +8,7 @@ import Game.Player;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
-public class AlphaBeta implements Player {
+public class MinMax implements Player {
     private Board board;
     private Game game;
 
@@ -24,29 +25,28 @@ public class AlphaBeta implements Player {
 
     @Override
     public String getName() {
-        return "Alpha Beta";
+        return "MinMax";
     }
 
     private int depth;
-    public AlphaBeta(int depth) {
-        this.depth=depth;
+
+    public MinMax(int depth) {
+        this.depth = depth;
     }
 
-    public AlphaBeta() {
-        this.depth=8;
+    public MinMax() {
+        this.depth=6;
     }
 
     private void generateMove() {
-        int i = minmax(board,0,Integer.MIN_VALUE, Integer.MAX_VALUE);
+        int i = minmax(board,0);
         game.requestToMakeMove(i,this);
     }
 
     /**
      * @param node  is a representation of the board at the current depth of play.
-     * @param alpha the best value that white player currently can guarantee.
-     * @param beta  the best value that black player currently can guarantee.
      */
-    private int minmax(Board node, int depth, int alpha, int beta) {
+    private int minmax(Board node, int depth) {
         int playing = node.getPlaying();
 
         //if node is leaf : return value of the node
@@ -64,13 +64,11 @@ public class AlphaBeta implements Player {
                 if (node.getValue(i) > 1) {
                     Board childNode = new Board(node);
                     childNode.putDownPiece(i);
-                    int value = minmax(childNode,depth+1, alpha, beta);
+                    int value = minmax(childNode,depth+1);
                     if(value > max){
                         max = value;
                         maxIndex = i;
                     }
-                    alpha = max(alpha, max);
-                    if (beta <= alpha) break;
                 }
             }
             if(depth == 0) return maxIndex;
@@ -87,13 +85,11 @@ public class AlphaBeta implements Player {
                 if (node.getValue(i) > 1) {
                     Board childNode = new Board(node);
                     childNode.putDownPiece(i);
-                    int value = minmax(childNode,depth+1,alpha, beta);
+                    int value = minmax(childNode,depth+1);
                     if(value < min){
                         min = value;
                         minIndex = i;
                     }
-                    beta = min(beta, min);
-                    if (beta <= alpha) break;
                 }
             }
             if(depth == 0) return minIndex;
@@ -102,3 +98,4 @@ public class AlphaBeta implements Player {
         return -1;
     }
 }
+

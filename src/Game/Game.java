@@ -1,6 +1,8 @@
 package Game;
 
 import Algorightms.AlphaBeta;
+import Algorightms.AlphaBeta2;
+import Algorightms.MinMax;
 import Algorightms.RandomMoveGenerator;
 
 import java.util.Random;
@@ -10,6 +12,8 @@ public final class Game implements Runnable{
     private Random coin = new Random();
     private Player white, black;
     private Player player1;
+    private int playerOneSide;
+    private int playerTwoSide;
     private Player player2;
     private Spectator spectator;
     private static Game running;
@@ -64,7 +68,9 @@ public final class Game implements Runnable{
 
     public Game(){
         RandomMoveGenerator randomMoves = new RandomMoveGenerator();
-        AlphaBeta alphaBeta = new AlphaBeta();
+        AlphaBeta alphaBeta = new AlphaBeta(8);
+        AlphaBeta alphaBeta2 = new AlphaBeta(8);
+        MinMax minMax = new MinMax(8);
         setPlayer1(randomMoves);
         setPlayer2(alphaBeta);
         log = new Log(player1.getName(), player2.getName());
@@ -118,9 +124,13 @@ public final class Game implements Runnable{
         if(toss){
             white = player1;
             black = player2;
+            playerOneSide = 1;
+            playerTwoSide = -1;
         } else {
             white = player2;
             black = player1;
+            playerOneSide = -1;
+            playerTwoSide = 1;
         }
 
         log.addInfo("\tBlack player: " + black.getName());
@@ -227,5 +237,21 @@ public final class Game implements Runnable{
 
     public void pause() {
         pauseFlag = true;
+    }
+
+    public int getPlayerTwoScore() {
+        if(playerTwoSide == 1){
+            return board.getWhiteScore();
+        } else {
+            return board.getBlackScore();
+        }
+    }
+
+    public int getPlayerOneScore() {
+        if(playerOneSide == 1){
+            return board.getWhiteScore();
+        } else {
+            return board.getBlackScore();
+        }
     }
 }

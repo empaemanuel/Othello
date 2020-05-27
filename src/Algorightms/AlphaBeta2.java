@@ -4,10 +4,12 @@ import Game.Game;
 import Game.Board;
 import Game.Player;
 
+import java.util.Random;
+
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
-public class AlphaBeta implements Player {
+public class AlphaBeta2 implements Player {
     private Board board;
     private Game game;
 
@@ -24,15 +26,15 @@ public class AlphaBeta implements Player {
 
     @Override
     public String getName() {
-        return "Alpha Beta";
+        return "Alpha Beta2";
     }
 
     private int depth;
-    public AlphaBeta(int depth) {
+    public AlphaBeta2(int depth) {
         this.depth=depth;
     }
 
-    public AlphaBeta() {
+    public AlphaBeta2() {
         this.depth=8;
     }
 
@@ -48,6 +50,7 @@ public class AlphaBeta implements Player {
      */
     private int minmax(Board node, int depth, int alpha, int beta) {
         int playing = node.getPlaying();
+        Random random = new Random();
 
         //if node is leaf : return value of the node
         if (playing == 0 || depth == this.depth) {
@@ -68,6 +71,10 @@ public class AlphaBeta implements Player {
                     if(value > max){
                         max = value;
                         maxIndex = i;
+                    } else if(value == max){
+                        if(random.nextBoolean()){
+                            maxIndex = i;
+                        }
                     }
                     alpha = max(alpha, max);
                     if (beta <= alpha) break;
@@ -91,6 +98,10 @@ public class AlphaBeta implements Player {
                     if(value < min){
                         min = value;
                         minIndex = i;
+                    } else if(value == min){
+                        if(random.nextBoolean()){
+                            minIndex = i;
+                        }
                     }
                     beta = min(beta, min);
                     if (beta <= alpha) break;
